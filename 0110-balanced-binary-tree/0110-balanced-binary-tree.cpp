@@ -11,28 +11,18 @@
  */
 class Solution {
 public:
-    int height(TreeNode *p){
-	int x,y;
-	if(p==NULL){
-		return 0;
-	}
-	y=height(p->right);
-	x=height(p->left);
-	return x>y?x+1:y+1;
-}
-    bool isSame(TreeNode *r){
-        if(r==NULL) return 1;
-        if(r->left==NULL && r->right==NULL){
-           return 1;
-        }
-        if(abs(height(r->left)-height(r->right))>1){ 
-            cout<<r->val<<endl;
-            return 0;}
-        else return isSame(r->left) && isSame(r->right);
+    int height(TreeNode* root)
+    {
+        if(!root) return 0;
+        int l = height(root->left);
+        int r = height(root->right);
+        if(l==-1 || r==-1) return -1;
+        if(abs(l-r)>1) return -1;
 
+        return 1 + max(l,r);
     }
-    bool isBalanced(TreeNode* r) {
-        if(r==NULL) return 1;
-        return isSame(r);
-    }
+    bool isBalanced(TreeNode* root) {
+        if(height(root)<0) return 0;
+        return 1;
+       }
 };
