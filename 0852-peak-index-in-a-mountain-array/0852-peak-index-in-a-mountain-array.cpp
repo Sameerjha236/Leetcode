@@ -1,32 +1,21 @@
 class Solution {
 public:
-    int peakIndexInMountainArray(vector<int>& a) {
-        int n=a.size();
-        int l=0,r=n-1;
-        while(l<=r)
+    int peakIndexInMountainArray(vector<int>& arr) {
+        int start=0;
+        int end=arr.size()-1;
+        
+        while(start<end)
         {
-            int m = (l+r)/2;
-            if(m == 0)
+           int mid=start+(end-start)/2;
+           if(arr[mid]<arr[mid+1])
             {
-                if(a[0]>a[1]) return 0;
-                else l=m+1;
+                start=mid+1;
             }
-            else if(m==n-1)
+            if(arr[mid]>arr[mid+1])
             {
-                if(a[m]>a[m-1]) return m;
-                else r = m-1;
-            }
-            else
-            {
-                if(a[m]>a[m-1] && a[m]>a[m+1]) 
-                    return m;
-                else if(a[m]<a[m+1])
-                {
-                    l = m+1;
-                }
-                else r = m-1;
+                end=mid;
             }
         }
-        return 0;
+        return start;
     }
 };
