@@ -7,15 +7,15 @@ class Solution
 {
 public:
 
-    void solve(vector<int> &arr, int n, int ind,int curr, vector<int> &ans)
+    void solve(vector<int> &arr, int n, int i,int curr, vector<int> &ans)
     {
-        ans.push_back(curr);
-        for(int i=ind; i<n;i++ )
+        if(i==n) 
         {
-            curr +=arr[i];
-            solve(arr,n,i+1,curr,ans);
-            curr -=arr[i];
+            ans.push_back(curr);
+            return;
         }
+        solve(arr,n,i+1,curr+arr[i],ans);
+        solve(arr,n,i+1,curr,ans);
     }
 
     vector<int> subsetSums(vector<int> arr, int n)
