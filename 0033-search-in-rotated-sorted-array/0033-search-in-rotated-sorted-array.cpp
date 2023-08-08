@@ -1,26 +1,24 @@
 class Solution {
 public:
     int search(vector<int>& vec, int target) {
-        int n=vec.size();
-        int low=0,high=n-1;
-        while(low<=high)
+        int n = vec.size();
+        int l = 0,r=n-1;
+        while(l<=r)
         {
-            int m= (low+high) >> 1;
-            if(target == vec[m])
-                return m;
-            else if(vec[low]<=vec[m] )
+            int m = (l+r)/2;
+            if(vec[m] == target) return m;
+
+            if(vec[l]<=vec[m])
             {
-                if(vec[low]<=target && target<=vec[m])
-                    high = m-1;
-                else
-                    low=m+1;
+                if(vec[l]<= target && vec[m]>=target)
+                    r = m-1;
+                else l = m+1;
             }
             else
             {
-                if(vec[m]<=target && target<=vec[high])
-                    low=m+1;
-                else
-                    high = m-1;
+                if(vec[m]<= target && vec[r]>=target)
+                    l = m+1;
+                else r = m-1;
             }
         }
         return -1;
