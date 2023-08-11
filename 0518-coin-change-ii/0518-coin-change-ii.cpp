@@ -1,24 +1,30 @@
-class Solution {
+
+class Solution
+{
 public:
-
-    int solve(int ind, int amt, vector<int> &coins, vector<vector<int>> &dp)
+    int f(int ind, int k, vector<int> &coins, vector<vector<int>> &dp)
     {
-        if(amt<0) return 0;
-        if(amt == 0) return 1;
-        if(dp[ind][amt]!=-1) return dp[ind][amt];
-        int ans = 0;
-        for(int i=ind;i<coins.size();i++)
+        if (ind == 0)
         {
-            int curr = solve(i,amt-coins[i],coins,dp);
-            ans += curr;
+            if (k % coins[0] == 0)
+                return 1;
+            return 0;
         }
-        return dp[ind][amt] = ans;
+        if (dp[ind][k] != -1)
+            return dp[ind][k];
+        int notpick = f(ind - 1, k, coins, dp);
+        int pick = 0;
+        if (coins[ind] <= k)
+            pick = f(ind, k - coins[ind], coins, dp);
+        return dp[ind][k] = pick + notpick;
     }
-
-    int change(int amt, vector<int>& coins) {
+    int change(int amount, vector<int> &coins)
+    {
+        if (amount == 0)
+            return 1;
         int n = coins.size();
-        vector<vector<int>> dp (n,vector<int> (amt+1,-1));
-        int ans = solve(0,amt,coins,dp);
+        vector<vector<int>> dp(n, vector<int>(amount + 1, -1));
+        int ans = f(n - 1, amount, coins, dp);
 
         return ans;
     }
