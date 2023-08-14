@@ -30,7 +30,6 @@ public:
         while(temp)
         {
             int k = temp->val*2 + carry;
-            // cout<<temp->val<<" "<<k<<" ";
             if(k>=10)
             {
                 temp->val = k % 10;
@@ -41,7 +40,6 @@ public:
                 temp->val = k;
                 carry = 0;
             }
-            // cout<<temp->val<<endl;
             temp = temp->next;
         }
         if(carry)
