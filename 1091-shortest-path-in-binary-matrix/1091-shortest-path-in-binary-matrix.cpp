@@ -19,7 +19,6 @@ public:
                 int i = store.front().first;
                 int j = store.front().second;
                 store.pop();
-                if(i == m-1 && j == n-1) return ans;
                 for(auto l:dir)
                 {
                     int nR = i + l[0];
@@ -27,6 +26,7 @@ public:
 
                     if(nR >= 0 && nC >= 0 && nR<m && nC<n && vis[nR][nC] && grid[nR][nC] == 0)
                     {
+                        if(nR == m-1 && nC == n-1) return ans+1;
                         vis[nR][nC] = 0;
                         store.push(make_pair(nR,nC));
                     }
