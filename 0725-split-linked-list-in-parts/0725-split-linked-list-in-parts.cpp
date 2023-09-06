@@ -1,72 +1,46 @@
-
-class Solution
-{
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
 public:
-    vector<ListNode *> splitListToParts(ListNode *head, int k)
-    {
-        vector<ListNode *> ans;
-        if (!head)
-        {
-            while (k--)
-                ans.push_back(nullptr);
-            return ans;
+    vector<ListNode*> splitListToParts(ListNode* head, int k) {
+        int len=0;
+        vector <ListNode*> ret;
+        ListNode* temp=head;
+        while(temp) {
+            temp=temp->next;
+            len++;
         }
-        ListNode *temp = head;
-        int n = 0;
-        while (temp)
-        {
-            temp = temp->next;
-            n++;
+        int size=len/k;
+        int rem=len%k;
+        temp=head;
+        while(temp!=NULL) {
+            ListNode* c=new ListNode(100);
+            ListNode* tempC=c;
+            int s=size;
+            if(rem>0) {
+                s++;
+                rem--;
+            }
+            for(int i=1;i<=s;i++) {
+                tempC->next=temp;
+                temp=temp->next;
+                tempC=tempC->next;
+            }
+            tempC->next=NULL;
+            ret.push_back(c->next);
         }
-        if (k >= n)
-        {
-            temp = head;
-            ListNode *curr = head;
-            while (ans.size() < k)
-            {
-                if (temp)
-                    curr = temp->next;
-                else
-                    curr = nullptr;
-                ans.push_back(temp);
-                if (temp)
-                    temp->next = nullptr;
-                temp = curr;
-            }
-            return ans;
+        if(ret.size()<k) {
+            int extra=k-ret.size();
+            for(int i=1;i<=extra;i++)ret.push_back(NULL);
         }
-
-        int box = n / k, extra = n % k, c = 1;
-        temp = head;
-        while (temp)
-        {
-            if (c == 1)
-            {
-                ans.push_back(temp);
-            }
-            if (c == box)
-            {
-                if (extra)
-                {
-                    extra--;
-                    ListNode *curr = temp->next->next;
-                    temp->next->next = nullptr;
-                    temp = curr;
-                }
-                else
-                {
-                    ListNode *curr = temp->next;
-                    temp->next = nullptr;
-                    temp = curr;
-                }
-                c = 1;
-            }
-            else
-            {
-                temp = temp->next;
-                c++;
-            }
-        }
-        return ans;
+        return ret;
     }
 };
