@@ -1,46 +1,37 @@
-class Solution {
-public:
-    bool canFinish(int sub, vector<vector<int>>& pre) {
-        vector<int> dep(sub,0);
-        unordered_map<int,vector<int>> hash;
-        unordered_map<int,vector<int>> det;
 
-        for(auto i:pre)
+class Solution
+{
+public:
+    bool canFinish(int numCourses, vector<vector<int>> &prerequisites)
+    {
+        vector<int> indegree(numCourses, 0);
+        vector<vector<int>> adj(numCourses);
+        for (int i = 0; i < prerequisites.size(); i++)
         {
-            dep[i[0]]++;
-            hash[i[1]].push_back(i[0]);
-            det[i[0]].push_back(i[1]);
+            int u = prerequisites[i][0];
+            int v = prerequisites[i][1];
+            adj[v].push_back(u);
+            indegree[u]++;
         }
-        queue<int> store;
-        for(int i=0;i<sub;i++)
+        queue<int> q;
+        for (int i = 0; i < numCourses; i++)
         {
-            if(dep[i]) continue;
-            store.push(i);
+            if (indegree[i] == 0)
+                q.push(i);
         }
-        
-        while(!store.empty())
+        int count = 0;
+        while (!q.empty())
         {
-            int curr = store.front();
-            dep[curr] = 0;
-            store.pop();
-            sub--;
-            for(auto k:hash[curr])
+            int node = q.front();
+            q.pop();
+            count++;
+            for (auto it : adj[node])
             {
-                if(dep[k] == 0) continue;
-                bool ck = 1;
-                for(auto i:det[k])
-                {
-                    if(dep[i] == 0) continue;
-                    ck = 0;
-                    break;
-                }
-                if(ck == 0) continue;
-                store.push(k);
-                dep[k] = 0;
+                indegree[it]--;
+                if (indegree[it] == 0)
+                    q.push(it);
             }
         }
-        if(sub <= 0) return true;
-
-        return false;
+        return count == numCourses;
     }
 };
