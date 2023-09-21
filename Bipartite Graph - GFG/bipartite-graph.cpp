@@ -5,31 +5,31 @@ using namespace std;
 // } Driver Code Ends
 class Solution {
 public:
+
+    bool helper(int node, vector<int> &vis, vector<int> adj[])
+    {
+        for(auto k: adj[node])
+        {
+            if(k == node) continue;
+            if(vis[k] == -1)
+            {
+                vis[k] = ! vis[node];
+                bool check = helper(k,vis,adj);
+                if(!check) return false;
+            }
+            else if(vis[k] == vis[node]) return false;
+        }
+        return true;
+    }
+
 	bool isBipartite(int v, vector<int>adj[]){
-	    // Code here
-	    queue<int> store;
 	    vector<int> vis(v,-1);
 	    for(int i=0;i<v;i++)
 	    {
 	        if(vis[i]>=0) continue;
-	        store.push(i);
 	        vis[i] = 0;
-	        while(!store.empty())
-	        {
-	            int node = store.front();
-	            store.pop();
-	            for(auto k: adj[node])
-	            {
-	                if(k == node) continue;
-	                if(vis[k] == -1)
-	                {
-	                    vis[k] = ! vis[node];
-	                    store.push(k);
-	                }
-	                else if(vis[k] == vis[node]) return false;
-	            }
-	        }
-	        
+	        bool check = helper(i,vis,adj);
+	        if(!check) return false;
 	    }
 	    return true;
 	}
