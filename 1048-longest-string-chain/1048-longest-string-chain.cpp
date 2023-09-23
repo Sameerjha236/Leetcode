@@ -2,74 +2,44 @@
 class Solution
 {
 public:
-    bool check(string p, string q)
+    static bool myComp(string &s1, string &s2)
     {
-        int m = p.size(), n = q.size();
-        bool k = 0;
+        return s1.size() < s2.size();
+    }
+    bool isPredecessor(string &wordI, string &wordJ)
+    {
         int i = 0, j = 0;
-        while (i < m && j < n)
+        while (i < wordI.size())
         {
-            if (p[i] == q[j])
+            if (j < wordJ.size() && wordI[i] == wordJ[j])
             {
                 i++;
                 j++;
             }
-            else if (k == 0)
-            {
-                k=1;
-                j++;
-            }
             else
-                return 0;
+                i++;
         }
-        return 1;
+        return i == wordI.size() && j == wordJ.size();
     }
-
-    int helper(string p, int k, unordered_map<int, vector<string>> &hash, unordered_map<string, int> &store)
-    {
-        int curr = 0;
-        for (auto q : hash[k])
-        {
-            if (check(p, q))
-            {
-                int tp = 0;
-                if(store[q] != -1) tp = store[q];
-                else tp = helper(q, q.size() + 1, hash, store);
-                curr = max(tp+1, curr);
-            }
-            else cout<<endl;
-        }
-        return max(curr, 1);
-    }
-
     int longestStrChain(vector<string> &words)
     {
-        int ans = 1;
-        unordered_map<int, vector<string>> hash;
-        unordered_map<string, int> store;
-
-        for (auto k : words)
+        int n = words.size();
+        sort(words.begin(), words.end(), myComp);
+        vector<int> dp(n, 1);
+        int len = 1;
+        for (int i = 1; i < n; i++)
         {
-            hash[k.size()].push_back(k);
-            store[k] = -1;
-        }
-
-        vector<int> len;
-        for(auto k:hash) len.push_back(k.first);
-        sort(len.begin(),len.end(),greater<int>());
-
-        for(auto l:len)
-        {
-            for(auto j: hash[l])
+            for (int j = 0; j < i; j++)
             {
-                int curr = helper(j, l + 1, hash,store);
-                cout<<j<<" "<<curr<<endl; 
-                store[j] = curr;
-                ans = max(curr, ans);
+                if (words[i].size() == words[j].size() + 1 &&
+                    isPredecessor(words[i], words[j]) &&
+                    dp[j] + 1 > dp[i])
+                {
+                    dp[i] = dp[j] + 1;
+                    len = max(len, dp[i]);
+                }
             }
-            cout<<endl;
         }
-
-        return ans;
+        return len;
     }
 };
