@@ -1,31 +1,23 @@
 class Solution {
 public:
-    double champagneTower(int amt, int qr, int qc) {
-        if(amt<1) return 0;
-        double ans=0;
-        int i = 0;
-        vector<vector<double>> store;
-        store.push_back({double(amt)});
-        while(i<qr)
+    double champagneTower(int poured, int query_row, int query_glass) {
+        vector<double>dp(101, 0);
+        dp[0] = (double) poured;
+        for (int i = 0; i < query_row; i++) 
         {
-            int c = (i+2);
-            vector<double> tp(c,0);
-            store.push_back(tp);
-            for(int j=0;j<=i;j++)
+            for (int j = i; j >= 0; j--)
             {
-                if(store[i][j]<=1) continue;
-                int l = j, r = j+1;
-                double exc = store[i][j] - 1;
-                store[i][j] = 1;
-                exc /= 2;
-                store[i+1][l] += exc;
-                store[i+1][r] += exc;
+                if (dp[j] > 1) 
+                {
+                    double overFlow = (dp[j] - 1.0) / 2.0;
+                    dp[j+1] += overFlow;
+                    dp[j] = overFlow;
+                } 
+                else {
+                    dp[j] = 0;
+                }
             }
-            i++;
         }
-        
-        ans = store[qr][qc];
-        if(ans>1) ans=1;
-        return ans;
+        return min(1.0, dp[query_glass]);
     }
 };
