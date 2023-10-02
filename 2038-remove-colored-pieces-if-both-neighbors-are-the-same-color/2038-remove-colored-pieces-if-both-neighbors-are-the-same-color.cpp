@@ -1,22 +1,18 @@
 class Solution {
 public:
-    bool winnerOfGame(string colors) {
-        map<char, int> c;
-        for (int i = 0; i < colors.size(); ) 
-        {
-            char x = colors[i];
-            int j = i;
-            while (j < colors.size() && colors[j] == x) 
+    bool winnerOfGame(string colors) 
+    {
+        int a=0,b=0,n=colors.length();
+        for(int i=1;i<n;i++){
+            if(colors[i]=='A' && colors[i+1]=='A' && colors[i-1]=='A')
             {
-                j++;
+                a++;
             }
-            c[x] += max(j - i - 2, 0);
-            i = j;
+            if(colors[i]=='B' && colors[i+1]=='B' && colors[i-1]=='B')
+            {
+                b++;
+            }
         }
-
-        if (c['A'] > c['B']) {
-            return true;
-        }
-        return false;
+        return (a>b && a!=0)?1:0;
     }
 };
