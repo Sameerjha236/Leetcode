@@ -1,22 +1,22 @@
 class MyHashMap {
 public:
-    vector<int> store;
+
+    int a[1000005];
+    
     MyHashMap() {
-        int k = 10e6 + 1;
-        vector<int> t (k,-1);
-        store = t;        
+        memset(a,-1, sizeof(a));
     }
     
     void put(int key, int value) {
-        store[key] = value;
+        a[key] = value;
     }
     
     int get(int key) {
-        return store[key];
+        return a[key];
     }
     
     void remove(int key) {
-        store[key] = -1;
+        a[key] = -1;
     }
 };
 
