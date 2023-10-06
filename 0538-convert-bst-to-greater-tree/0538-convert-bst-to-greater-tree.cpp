@@ -11,25 +11,17 @@
  */
 class Solution {
 public:
-
-    void inorder(TreeNode* root, vector<TreeNode*> &store)
-    {
-        if(!root) return;
-        inorder(root->left,store);
-        store.push_back(root);
-        inorder(root->right,store);
-    }
-
+    int curSum=0;
     TreeNode* convertBST(TreeNode* root) {
-        vector<TreeNode*> store;
-        inorder(root,store);
-
-        int n = store.size();
-        for(int i = n-2;i>=0;i--)
-        {
-            store[i]->val += store[i+1]->val; 
-        }
-
+        solve(root);
         return root;
+    }
+    void solve(TreeNode* root)
+    {
+        if(root==NULL) return;
+        if(root->right)solve(root->right);
+        curSum+=root->val;
+        root->val = curSum;
+        if(root->left)solve(root->left);
     }
 };
