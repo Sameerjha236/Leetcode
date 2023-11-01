@@ -1,70 +1,34 @@
 class Solution {
-
-bool check(string a, string b)
-{
-    bool c = 0;
-    for(int i=0;i<a.size();i++)
-    {
-        if(a[i] != b[i])
-        {
-            if(c == 0) c=1;
-            else return 0;
-        } 
-    }
-    return 1;
-}
-
 public:
-    int ladderLength(string begin, string end, vector<string>& words) {
-        int n = words.size();
-        if(n == 1)
-        {
-            if(end == words[0] && check(begin,end)) return 2;
-            return 0;
-        }
-        map<string, vector<string>> adj;
-        for(int i=0;i<n;i++)
-        {
-            for(int j=i+1;j<n;j++)
-            {
-                if(check(words[i], words[j]))
-                {
-                    adj[words[i]].push_back(words[j]);
-                    adj[words[j]].push_back(words[i]);
-                }    
-            }
-        }
-        queue<string> q;
-        map<string,int> dist;
-        for(auto k: adj)
-        {
-            if(check(k.first,begin))
-            {
-                if(k.first == end) return 2;
-                q.push(k.first);
-                dist[k.first] = 1;
-            }
-            else dist[k.first] = INT_MAX;
-        }
+    int ladderLength(string begin, string end, vector<string>& word) {
+        set<string> st (word.begin(), word.end());
+        if(st.find(end) == st.end()) return 0;
+        queue<pair<string,int>> q;
+        q.push({begin,1});
+        st.erase(begin);
+
         while(!q.empty())
         {
-            string node = q.front();
-            // cout<<node<<" -> ";
+            string curr = q.front().first;
+            int lvl = q.front().second;
             q.pop();
-            for(auto k:adj[node])
+            if(curr == end) return lvl;
+            for(int i=0;i<curr.size();i++)
             {
-                if(dist[node] + 1 < dist[k])
+                char t = curr[i];
+                for(char k='a'; k<='z'; k++)
                 {
-                    dist[k] = dist[node] + 1;
-                    // cout<<k<<" ";
-                    if(k == end) break;
-                    q.push(k);
+                    curr[i] = k;
+                    if(st.find(curr) != st.end())
+                    {
+                        q.push({curr,lvl+1});
+                        st.erase(curr);
+                    }
                 }
+                curr[i] = t;
             }
-                // cout<<endl;
         }
-        if(dist[end] == INT_MAX) return 0;
-        if(dist[end] == 0) return 0;
-        return dist[end]+1;
+
+        return 0;
     }
 };
