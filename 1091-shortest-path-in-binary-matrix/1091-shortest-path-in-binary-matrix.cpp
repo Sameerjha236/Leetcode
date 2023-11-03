@@ -1,35 +1,36 @@
 class Solution {
 public:
     int shortestPathBinaryMatrix(vector<vector<int>>& grid) {
-        int m = grid.size(), n = grid[0].size();
-        if(grid[0][0] || grid[m-1][n-1]) return -1;
-        if(m == 1 && n == 1 ) return 1;
-        queue<pair<int,int>>store;
-        store.push(make_pair(0,0));
-        vector<vector<bool>> vis(m, vector<bool> (n,1));
-        vis[0][0] = 0;
-        int ans = 0;
-        vector<vector<int>> dir = {{0,1}, {0,-1}, {1,0}, {-1,0}, {1,1}, {-1,1}, {1,-1}, {-1,-1}};
-        while(!store.empty())
+        int dr[]={0,0,-1,1,-1,1,-1,1};
+        int dc[]={-1,1,0,0,-1,1,1,-1};
+        if(grid[0][0]==1)
         {
-            int k = store.size();
-            ans++;
-            while(k--)
+            return -1;
+        }
+        queue<pair<int,pair<int,int>>> q;
+        int n=grid.size();
+        int m=grid[0].size();
+        vector<vector<int>> dis(n,vector<int>(m,1e9));
+        dis[0][0]=0;
+        q.push({0,{0,0}});
+        while(!q.empty())
+        {
+            int x=q.front().second.first;
+            int y=q.front().second.second;
+            int cost=q.front().first;
+            if(x==n-1 && y==m-1)
             {
-                int i = store.front().first;
-                int j = store.front().second;
-                store.pop();
-                for(auto l:dir)
+                return cost+1;
+            }
+            q.pop();
+            for(int i=0;i<8;i++)
+            {
+                int r=x+dr[i];
+                int c=y+dc[i];
+                if(r>=0 && c>=0 && r<n && c<n && dis[r][c]>cost+1 && grid[r][c]==0)
                 {
-                    int nR = i + l[0];
-                    int nC = j + l[1];
-
-                    if(nR >= 0 && nC >= 0 && nR<m && nC<n && vis[nR][nC] && grid[nR][nC] == 0)
-                    {
-                        if(nR == m-1 && nC == n-1) return ans+1;
-                        vis[nR][nC] = 0;
-                        store.push(make_pair(nR,nC));
-                    }
+                    dis[r][c]=cost+1;
+                    q.push({cost+1,{r,c}});
                 }
             }
         }
