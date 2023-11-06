@@ -9,7 +9,7 @@ class Solution {
         int m = grid.size(), n = grid[0].size();
         
         vector<pair<int,int>> cord = {{0,1},{0,-1}, {1,0}, {-1,0}};
-        queue<pair<int, pair<int,int>>> q;
+        priority_queue<pair<int,pair<int,int>>,vector<pair<int,pair<int,int>>>, greater<pair<int,pair<int,int>>> >q;
         vector<vector<int>> dist(m, vector<int> (n,INT_MAX));
         
         dist[0][0] = 0;
@@ -17,9 +17,10 @@ class Solution {
         
         while(!q.empty())
         {
-            int cost = q.front().first;
-            int r = q.front().second.first;
-            int c = q.front().second.second;
+            int cost = q.top().first;
+            int r = q.top().second.first;
+            int c = q.top().second.second;
+            if(r == m-1 && c == n-1) return cost;
             q.pop();
             
             for(auto k: cord)
@@ -40,7 +41,7 @@ class Solution {
                 }
             }
         }
-        return dist[m-1][n-1];
+        return -1;
     }
 };
 
