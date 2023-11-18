@@ -1,36 +1,23 @@
 class Solution {
 public:
-    int maxFrequency(vector<int>& nums, int t) {
-        sort(nums.begin(),nums.end());
-        int ans = 1, n = nums.size();
-
-        for(int i=n-1;i>=0;i--)
-        {
-            if(i < n-1 && nums[i] == nums[i+1]) continue;
-            int curr = 1, k = t;
-            // cout<<i<<" "<<nums[i]<<endl;
-            for(int j = i-1;j>=0;j--)
-            {
-                if(nums[j] == nums[i])
-                {
-                    curr++;
-                    // cout<<"a\n";
-                }
-                else
-                {
-                    if(nums[i] - nums[j] <=k)
-                    {
-                        curr++;
-                        k = k - (nums[i] - nums[j]);
-                        // cout<<"b\n";
-                    }
-                    else break;
-                }
+    int maxFrequency(vector<int>& nums, int k) {
+        sort(nums.begin(), nums.end());
+        int left = 0;
+        int ans = 0;
+        long curr = 0;
+        
+        for (int right = 0; right < nums.size(); right++) {
+            long target = nums[right];
+            curr += target;
+            
+            while ((right - left + 1) * target - curr > k) {
+                curr -= nums[left];
+                left++;
             }
-            ans = max(ans,curr);
-
+            
+            ans = max(ans, right - left + 1);
         }
-
+        
         return ans;
     }
 };
