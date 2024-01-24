@@ -10,48 +10,43 @@
  * };
  */
 class Solution {
-
-    int dfs(TreeNode * root, int even, int odd, unordered_map<int,int> store)
-    {
-        if(!root)
-            return 0;
-        int curr = root->val;
-        int f = store[curr];
-        if(f == 0)
-        {
-            odd++;
-            store[curr] = 1;
-        }
-        else if(f%2)
-        {
-            odd--;
-            even++;
-        }
-        else
-        {
-            odd++;
-            even--;
-        }
-        store[curr] = f + 1;
-
-        int a = 0, b = 0;
-        if(!root->left && !root->right)
-        {
-            if(odd==1 || odd == 0) return 1;
-            return 0;
-        }
-        if(root->left)
-            a = dfs(root->left,even,odd,store);
-        if(root->right)
-            b = dfs(root->right,even,odd,store);
-        return a+b;
-    }
-
 public:
+    int ans = 0;
+    bool pal_checker(vector<int>&fr){
+        int ind = 0;
+        for(int i : fr){
+            if(i%2 == 1){
+                ind++;
+            }
+        }
+        
+        return ind <= 1;
+    }
+    void solve(TreeNode* root,vector<int>&fr){
+       if(root -> left == NULL && root -> right == NULL){
+           if(pal_checker(fr)){
+               ans++;
+           }
+           return ;
+       } 
+        
+       if(root->left != NULL){
+           fr[root->left->val]++;
+           solve(root->left,fr);
+           fr[root->left->val]--;
+       }  
+       if(root->right != NULL){
+           fr[root->right->val]++;
+           solve(root->right,fr);
+           fr[root->right->val]--;
+       }  
+        
+        
+    }
     int pseudoPalindromicPaths (TreeNode* root) {
-        unordered_map<int,int> store;
-        int even = 0, odd = 0;
-        int ans = dfs(root,even,odd,store);
+        vector<int>fr(10,0);
+        fr[root->val]++;
+        solve(root,fr);
         return ans;
     }
 };
