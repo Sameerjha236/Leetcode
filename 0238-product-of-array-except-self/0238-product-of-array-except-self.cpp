@@ -1,25 +1,28 @@
 class Solution {
 public:
     vector<int> productExceptSelf(vector<int>& nums) {
-        int n = nums.size();
-        
-
-        vector<int> result(n, 1);
-        
-
-        int leftProduct = 1;
-        for (int i = 0; i < n; ++i) {
-            result[i] *= leftProduct;
-            leftProduct *= nums[i];
+        long long int cnt = 0, total = 1, ez = 1;
+        for (auto k : nums) {
+            if (k == 0) {
+                cnt++;
+                if (cnt > 1) {
+                    vector<int> ans(nums.size(), 0);
+                    return ans;
+                }
+                total = 0;
+            } else {
+                total *= k;
+                ez *= k;
+            }
+            // cout<<total<<" "<<ez<<endl;
         }
-        
-
-        int rightProduct = 1;
-        for (int i = n - 1; i >= 0; --i) {
-            result[i] *= rightProduct;
-            rightProduct *= nums[i];
+        vector<int> ans;
+        for (auto k : nums) {
+            if (k == 0)
+                ans.push_back(ez);
+            else
+                ans.push_back(total / k);
         }
-        
-        return result;
+        return ans;
     }
 };
