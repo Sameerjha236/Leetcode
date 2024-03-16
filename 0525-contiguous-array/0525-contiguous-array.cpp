@@ -17,11 +17,8 @@ public:
             {
                 ans = max(ans,i-hash[o-z]);
             }
-            
-            if(hash.find(o - z) == hash.end())
-            {
+            else
                 hash[o-z] = i;
-            }
         }
 
         return ans;
