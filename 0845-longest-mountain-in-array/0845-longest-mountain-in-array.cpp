@@ -5,11 +5,10 @@ public:
         if (n < 3)
             return 0;
         for (int i = 1; i < n; i++) {
-            int a = i - 1, b = i + 1, curr = 0;
+            int a = i - 1, b = i + 1;
 
             while (a >= 0 && b < n && arr[a] < arr[a + 1] &&
                    arr[b] < arr[b - 1]) {
-
                 a--;
                 b++;
             }
